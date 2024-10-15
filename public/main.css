@@ -22,7 +22,7 @@ a:link {
   
   /* visited link */
   a:visited {
-    color: tomato;
+    color: rgb(196, 107, 92);
     text-decoration: none;
     padding:5px;
   }
