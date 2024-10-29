@@ -1,5 +1,6 @@
 const express = require("express")
 const router = express.Router()
+const { check, validationResult } = require('express-validator');
 
 const redirectLogin = (req, res, next) => {
     if (!req.session.userId ) {
@@ -15,7 +16,7 @@ router.get('/search',function(req, res, next){
 
 router.get('/search_result', function (req, res, next) {
     // Search the database
-    let sqlquery = "SELECT * FROM books WHERE name LIKE '%" + req.query.search_text + "%'" // query database to get all the books
+    let sqlquery = "SELECT * FROM books WHERE name LIKE '%" + req.sanitize(req.query.search_text) + "%'" // query database to get all the books
     // execute sql query
     db.query(sqlquery, (err, result) => {
         if (err) {
@@ -41,18 +42,23 @@ router.get('/addbook', redirectLogin, function (req, res, next) {
     res.render('addbook.ejs')
 })
 
-router.post('/bookadded', function (req, res, next) {
-    // saving data in database
-    let sqlquery = "INSERT INTO books (name, price) VALUES (?,?)"
-    // execute sql query
-    let newrecord = [req.body.name, req.body.price]
-    db.query(sqlquery, newrecord, (err, result) => {
-        if (err) {
-            next(err)
-        }
-        else
-            res.send(' This book is added to database, name: '+ req.body.name + ' price '+ req.body.price)
-    })
+router.post('/bookadded', [check('price').isCurrency()], function (req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.redirect('./addbook'); 
+    } else { 
+        // saving data in database
+        let sqlquery = "INSERT INTO books (name, price) VALUES (?,?)"
+        // execute sql query
+        let newrecord = [req.sanitize(req.body.name), req.sanitize(req.body.price)]
+        db.query(sqlquery, newrecord, (err, result) => {
+            if (err) {
+                next(err)
+            }
+            else
+                res.send(' This book is added to database, name: '+ req.sanitize(req.body.name) + ' price '+ req.sanitize(req.body.price))
+        })
+    }
 }) 
 
 router.get('/bargainbooks', function(req, res, next) {
