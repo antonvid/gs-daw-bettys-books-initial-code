@@ -20,24 +20,24 @@ a:link {
     padding:5px;
   }
   
-  /* visited link */
-  a:visited {
-    color: rgb(196, 107, 92);
-    text-decoration: none;
-    padding:5px;
-  }
-  
-  /* mouse over link */
-  a:hover {
-    color: white;
-    text-decoration: none;
-    background-color: orangered;
-    padding:5px;
-  }
-  
-  /* selected link */
-  a:active {
-    color: blue;
-    text-decoration: none;
-    padding:5px;
-  }
+/* visited link */
+a:visited {
+  color: rgb(196, 107, 92);
+  text-decoration: none;
+  padding:5px;
+}
+
+/* mouse over link */
+a:hover {
+  color: white;
+  text-decoration: none;
+  background-color: orangered;
+  padding:5px;
+}
+
+/* selected link */
+a:active {
+  color: blue;
+  text-decoration: none;
+  padding:5px;
+}
